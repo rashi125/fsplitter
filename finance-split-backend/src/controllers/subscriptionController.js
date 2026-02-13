@@ -9,7 +9,7 @@ exports.createSubscription = async (req, res) => {
     // check user belongs to group
     const group = await Group.findOne({
       _id: groupId,
-      members: req.user.userId
+      members: req.user.userId   // IMPORTANT CHECK
     });
 
     if (!group) {
@@ -24,13 +24,14 @@ exports.createSubscription = async (req, res) => {
     });
 
     res.status(201).json(subscription);
+
   } catch (error) {
-  console.log(error);
-  res.status(500).json({ 
-    message: "Subscription creation failed",
-    error: error.message
-  });
-}
+    console.log(error);
+    res.status(500).json({
+      message: "Subscription creation failed",
+      error: error.message
+    });
+  }
 };
 
 // GET GROUP SUBSCRIPTIONS
@@ -39,86 +40,51 @@ exports.getGroupSubscriptions = async (req, res) => {
     const { groupId } = req.params;
 
     const subscriptions = await Subscription.find({ group: groupId });
-    res.json(subscriptions);
+
+    res.status(200).json(subscriptions);
+
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to fetch subscriptions" });
   }
 };
+
+// GET SPLIT DETAILS (Equal Split Logic)
 exports.getSplitDetails = async (req, res) => {
   try {
     const { subscriptionId } = req.params;
 
-    const subscription = await Subscription.findById(subscriptionId)
-      .populate("group");
+    const subscription = await Subscription.findById(subscriptionId);
 
     if (!subscription) {
       return res.status(404).json({ message: "Subscription not found" });
     }
 
-    const memberCount = subscription.group.members.length;
+    const usages = await Usage.find({ subscription: subscriptionId })
+      .populate("user", "name");
 
-    const splitAmount = subscription.totalCost / memberCount;
-
-    res.json({
-      subscription: subscription.name,
-      totalCost: subscription.totalCost,
-      members: memberCount,
-      perPersonCost: splitAmount
-    });
-
-  } catch (error) {
-    res.status(500).json({ message: "Failed to calculate split" });
-  }
-};
-exports.getSplitDetails = async (req, res) => {
-  try {
-    const { subscriptionId } = req.params;
-
-    const subscription = await Subscription.findById(subscriptionId)
-      .populate("group");
-
-    if (!subscription) {
-      return res.status(404).json({ message: "Subscription not found" });
+    if (usages.length === 0) {
+      return res.status(400).json({ message: "No usage data found" });
     }
 
-    const memberCount = subscription.group.members.length;
+    // total hours
+    const totalHours = usages.reduce((sum, u) => sum + u.hours, 0);
 
-    const splitAmount = subscription.totalCost / memberCount;
-
-    res.json({
-      subscription: subscription.name,
-      totalCost: subscription.totalCost,
-      members: memberCount,
-      perPersonCost: splitAmount
-    });
-
-  } catch (error) {
-    res.status(500).json({ message: "Failed to calculate split" });
-  }
-};
-exports.getSplitDetails = async (req, res) => {
-  try {
-    const { subscriptionId } = req.params;
-
-    const subscription = await Subscription.findById(subscriptionId)
-      .populate("group");
-
-    if (!subscription) {
-      return res.status(404).json({ message: "Subscription not found" });
-    }
-
-    const memberCount = subscription.group.members.length;
-
-    const splitAmount = subscription.totalCost / memberCount;
+    const result = usages.map(u => ({
+      user: u.user.name,
+      hours: u.hours,
+      amountToPay: (u.hours / totalHours) * subscription.totalCost
+    }));
 
     res.json({
       subscription: subscription.name,
       totalCost: subscription.totalCost,
-      members: memberCount,
-      perPersonCost: splitAmount
+      totalHours,
+      split: result
     });
 
   } catch (error) {
-    res.status(500).json({ message: "Failed to calculate split" });
+    console.log(error);
+    res.status(500).json({ message: "Split calculation failed" });
   }
 };

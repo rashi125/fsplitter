@@ -3,12 +3,15 @@ const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const {
   createSubscription,
-  getGroupSubscriptions
+  getGroupSubscriptions,
+  getSplitDetails
 } = require("../controllers/subscriptionController");
 
-router.post("/", auth, createSubscription);
-router.get("/:groupId", auth, getGroupSubscriptions);
+// Specific FIRST
 router.get("/split/:subscriptionId", auth, getSplitDetails);
 
+// Then generic
+router.post("/", auth, createSubscription);
+router.get("/:groupId", auth, getGroupSubscriptions);
 
 module.exports = router;
