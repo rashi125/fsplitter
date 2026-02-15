@@ -18,4 +18,4 @@ const usageSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model("usage", usageSchema);
+module.exports = mongoose.model("Usage", usageSchema);
