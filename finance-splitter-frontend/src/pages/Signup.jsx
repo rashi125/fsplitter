@@ -50,9 +50,9 @@ const AuthForm = () => {
         <form onSubmit={handleSignUp}>
           <h1>Create Account</h1>
           <div className="social-container">
-            <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-            <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+            <a href="" className="social"><i className="Google"></i></a>
+            {/* <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
+            <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a> */}
           </div>
           <span>or use your email for registration</span>
           <input type="text" placeholder="Name" value={signUpData.name} onChange={e => setSignUpData({...signUpData, name: e.target.value})} />
