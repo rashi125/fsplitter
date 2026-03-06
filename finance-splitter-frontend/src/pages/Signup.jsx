@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./AuthForm.css";
 import { registerUser, loginUser } from "../api";
-
+import axios from "axios";
 const AuthForm = () => {
   const [rightPanelActive, setRightPanelActive] = useState(false);
 
@@ -25,6 +25,22 @@ const AuthForm = () => {
       alert(error.response?.data?.message || "Registration failed");
     }
   };
+  // Inside AuthForm component:
+const handleForgotPassword = async (e) => {
+  e.preventDefault();
+  const email = prompt("Please enter your email address:");
+  if (!email) return;
+
+  try {
+    // Replace with your axios instance or API call
+    await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+    alert("If that email exists, a reset link has been sent!");
+  } catch (error) {
+    alert("Error sending reset link.");
+  }
+};
+
+// Update the <a> tag in your JSX:
 
   // Handle Sign In
   const handleSignIn = async (e) => {
@@ -74,7 +90,7 @@ const AuthForm = () => {
           <span>or use your account</span>
           <input type="email" placeholder="Email" value={signInData.email} onChange={e => setSignInData({...signInData, email: e.target.value})} />
           <input type="password" placeholder="Password" value={signInData.password} onChange={e => setSignInData({...signInData, password: e.target.value})} />
-          <a href="#">Forgot your password?</a>
+          <a href="/reset-password/:token" onClick={handleForgotPassword}>Forgot your password?</a>
           <button type="submit">Sign In</button>
         </form>
       </div>

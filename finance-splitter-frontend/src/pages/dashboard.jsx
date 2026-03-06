@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [groups, setGroups] = useState([]);
   const [groupName, setGroupName] = useState("");
 
   const token = localStorage.getItem("token");
-
+  const navigate = useNavigate();
   const fetchGroups = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/groups", {
@@ -90,7 +91,7 @@ to-[#111827]
                   </div>
                   <button
                     style={styles.secondaryButton}
-                    onClick={() => (window.location.href = `/group/${group._id}`)}
+                   onClick={() => navigate(`/group/${group._id}`)}
                   >
                     View Details
                   </button>
