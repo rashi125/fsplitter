@@ -15,3 +15,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* Purana sab hata kar yeh dalo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background-color: #081212; /* Yahi solid dark colour */
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Side scrolling band karne ke liye */
+}

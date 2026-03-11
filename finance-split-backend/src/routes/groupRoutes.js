@@ -4,10 +4,12 @@ const auth = require("../middleware/authMiddleware");
 const {
   createGroup,
   getMyGroups,
-  addMemberToGroup
+  addMemberToGroup,
+  getGroupById
 } = require("../controllers/groupController");
 
 router.post("/", auth, createGroup);
 router.get("/", auth, getMyGroups);
 router.post("/add-member", auth, addMemberToGroup);
+router.get("/:groupId", auth, getGroupById);
 module.exports = router;
