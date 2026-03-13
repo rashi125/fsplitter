@@ -52,7 +52,7 @@ const GroupDetails = () => {
 
   return (
     // ROOT DIV WITH SOLID BACKGROUND COLOUR
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#091842] via-[#082175] to-[#111827]  text-white font-sans selection:bg-[#00E5FF] selection:text-black">
+    <div className="min-h-screen w-full bg-[#0F172A] text-white font-sans selection:bg-[#00E5FF] selection:text-black">
       
       {/* STICKY TOP NAVIGATION */}
       <nav className="sticky top-0 z-50 bg-white/20 backdrop-blur-md border-b border-[#1A2E2E] px-6 py-4">
@@ -60,14 +60,14 @@ const GroupDetails = () => {
           <div className="flex items-center gap-10">
             <button 
               onClick={() => navigate("/dashboard")} 
-              className="text-[#00E5FF] font-bold flex items-center gap-2 hover:brightness-125 transition-all text-xs tracking-widest"
+     i         className="text-[#000000] font-bold flex items-center gap-2 hover:brightness-125 transition-all text-xs tracking-widest"
             >
               <span>←</span> BACK TO DASHBOARD
             </button>
             
             {/* Nav Links for Desktop */}
             <div className="hidden lg:flex items-center gap-8 text-[10px] font-black tracking-[0.2em] text-gray-500">
-              <span className="text-[#00E5FF] cursor-pointer">OVERVIEW</span>
+              <span className="hover:text-white cursor-pointer">OVERVIEW</span>
               <span className="hover:text-white cursor-pointer transition-colors">ANALYTICS</span>
               <span className="hover:text-white cursor-pointer transition-colors">HISTORY</span>
               <span className="hover:text-white cursor-pointer transition-colors">SETTINGS</span>
@@ -76,7 +76,7 @@ const GroupDetails = () => {
 
           <div className="flex items-center gap-5">
             <span className="cursor-pointer text-gray-400 hover:text-white text-xl">🔔</span>
-            <div className="bg-[#00E5FF] text-black w-9 h-9 rounded-full flex items-center justify-center font-black text-sm shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+            <div className="bg-[#24db92] text-black w-9 h-9 rounded-full flex items-center justify-center font-black text-sm shadow-[0_0_15px_rgba(0,229,255,0.2)]">
               JD
             </div>
           </div>
@@ -120,7 +120,7 @@ const GroupDetails = () => {
                 </div>
                 <button 
                   onClick={addMember}
-                  className="bg-[#00E5FF] text-black font-black px-10 py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#00E5FF]/20 whitespace-nowrap"
+                  className="bg-[#3cb387] text-black font-black px-10 py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#00E5FF]/20 whitespace-nowrap"
                 >
                   INVITE NOW ➤
                 </button>
@@ -131,10 +131,10 @@ const GroupDetails = () => {
             <div className="bg-[#020406]/80  rounded-[2rem] p-8 border border-[#1A2E2E] shadow-2xl">
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-4">
-                  <div className="bg-[#1A2E2E] p-3 rounded-xl text-[#00E5FF] text-xl">👥</div>
+                  <div className="bg-[#1A2E2E] p-3 rounded-xl text-[#99e7bc] text-xl">👥</div>
                   <h3 className="text-xl font-bold tracking-tight">Active Members</h3>
                 </div>
-                <span className="bg-[#00E5FF]/10 text-[#00E5FF] text-[10px] font-black border border-[#00E5FF]/20 px-4 py-2 rounded-full tracking-[0.1em]">
+                <span className="bg-[#00E5FF]/10 text-[#0dbd7d] text-[10px] font-black border border-[#00E5FF]/20 px-4 py-2 rounded-full tracking-[0.1em]">
                   {groupMembers.length} ONLINE
                 </span>
               </div>
@@ -175,7 +175,7 @@ const GroupDetails = () => {
                 <p className="text-gray-600 text-xs max-w-[200px] leading-relaxed mb-8">
                   Link a plan to this group to start tracking shared usage.
                 </p>
-                <button className="w-full border border-[#1A2E2E] text-[#00E5FF] py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-[#00E5FF] hover:text-black transition-all">
+                <button className="w-full border border-[#1A2E2E] text-[#000000] py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-[#00E5FF] hover:text-black transition-all">
                   BROWSE ALL PLANS
                 </button>
               </div>

@@ -39,12 +39,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={styles.container} className="bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))]
-
-from-[#1d4ed8]
-via-[#1e40af]
-to-[#111827]
-">
+    <div style={styles.container} className="
+bg-[#0F172A]">
       <div style={styles.contentWrapper}>
         <header style={styles.headerSection}>
           <h1 style={styles.headerTitle}>Finance Dashboard</h1>
@@ -157,7 +153,7 @@ const styles = {
     flex: 1,
     padding: "12px 16px",
     borderRadius: "10px",
-    border: "1px solid #CBD5E1",
+    border: "1px solid #1E293B",
     fontSize: "15px",
     outline: "none",
     transition: "border-color 0.2s",
@@ -165,8 +161,7 @@ const styles = {
   },
   primaryButton: {
     padding: "12px 24px",
-    backgroundColor: "#4F46E5", // Modern Indigo
-    color: "white",
+    backgroundColor: "#10B981 ", 
     border: "none",
     borderRadius: "10px",
     cursor: "pointer",

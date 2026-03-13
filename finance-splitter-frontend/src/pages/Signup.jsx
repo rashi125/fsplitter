@@ -47,7 +47,7 @@ const AuthForm = () => {
 
   return (
     /* Apply the maanga hua gradient here */
-    <div className="auth-page-wrapper bg-gradient-to-br from-[#091842] via-[#082175] to-[#111827]">
+    <div className="auth-page-wrapper bg-[#0F172A]">
       <h1 className="text-white text-4xl md:text-6xl text-center mb-8 main-title font-bold">
         Finance Splitter
       </h1>

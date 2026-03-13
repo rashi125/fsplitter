@@ -22,16 +22,17 @@ p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px;
 span { font-size: 12px; }
 
 .forgot-link {
-    color: #333;
+    color: #056c4a;
     font-size: 14px;
+    font-weight:bold;
     text-decoration: none;
     margin: 15px 0;
 }
 
 button {
     border-radius: 20px;
-    border: 1px solid #0e0c0b;
-    background-color: #000000;
+    border: 0.5px solid #0e0c0b;
+    background-color: #10B981;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;
@@ -44,7 +45,7 @@ button {
 
 button:active { transform: scale(0.95); }
 button:focus { outline: none; }
-button.ghost { background-color: transparent; border-color: #FFFFFF; }
+button.ghost { background-color: #10B981; border-color: #FFFFFF; }
 
 form {
     background-color: #FFFFFF;
@@ -58,8 +59,8 @@ form {
 }
 
 input {
-    background-color: #eee;
-    border: none;
+    background-color: #F8FAFC;
+    border:0.5px solid #858383 ;
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
@@ -108,7 +109,7 @@ input {
 .container.right-panel-active .overlay-container { transform: translateX(-100%); }
 
 .overlay {
-    background: #0c0c0e;
+    background:#1E293B;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
