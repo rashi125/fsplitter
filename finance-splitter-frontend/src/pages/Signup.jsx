@@ -18,7 +18,7 @@ const AuthForm = () => {
       
       // EMAIL SET KARNA (SIGN UP PE)
       localStorage.setItem("userEmail", signUpData.email);
-      
+      localStorage.setItem("userId", data.user.id);
       alert("Registered successfully!");
       window.location.href = "/dashboard";
     } catch (error) {

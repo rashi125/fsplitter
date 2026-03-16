@@ -232,7 +232,9 @@ const GroupDetails = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0F172A] text-white font-sans selection:bg-[#3cb387]">
-      {/* Navbar */}
+      {/* Navbar */} <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#3cb387]/20 blur-[120px] rounded-full animate-pulse"></div>
+    <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-[#00E5FF]/25 blur-[100px] rounded-full"></div>
+        <div className="absolute bottom-[40%] right-[20%] w-[30%] h-[30%] bg-[#00E5FF]/15 blur-[100px] rounded-full animate-pulse"></div>
       <nav className="sticky top-0 z-50 bg-[white]/10 backdrop-blur-md border-b border-[#384242] px-6 py-4">
         <div className="max-w-[1600px] mx-auto flex justify-between items-center">
           <button

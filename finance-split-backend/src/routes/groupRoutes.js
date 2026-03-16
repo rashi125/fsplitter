@@ -12,4 +12,5 @@ router.post("/", auth, createGroup);
 router.get("/", auth, getMyGroups);
 router.post("/add-member", auth, addMemberToGroup);
 router.get("/:groupId", auth, getGroupById);
+router.delete("/leave/:groupId", auth, groupController.leaveGroup);
 module.exports = router;

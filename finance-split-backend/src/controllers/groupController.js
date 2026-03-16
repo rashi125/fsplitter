@@ -84,3 +84,31 @@ exports.getGroupById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch group details" });
   }
 };
+// controllers/groupController.js
+
+// LEAVE GROUP LOGIC
+exports.leaveGroup = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const userId = req.user.userId;
+
+    const group = await Group.findById(groupId);
+    if (!group) return res.status(404).json({ message: "Group not found" });
+
+    // Agar Admin leave karna chahta hai, toh use pehle kisi aur ko admin banana hoga 
+    // ya group delete karna hoga (standard protocol)
+    if (group.admin.toString() === userId) {
+      return res.status(400).json({ 
+        message: "Admin cannot leave. Please delete the group or transfer admin rights." 
+      });
+    }
+
+    // Member ko list se bahar nikaalo
+    group.members = group.members.filter(memberId => memberId.toString() !== userId);
+    await group.save();
+
+    res.json({ success: true, message: "You left the group." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
