@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import "./AuthForm.css";
 import { registerUser, loginUser } from "../api";
@@ -5,19 +6,41 @@ import axios from "axios";
 
 const AuthForm = () => {
   const [rightPanelActive, setRightPanelActive] = useState(false);
-
   const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "" });
   const [signInData, setSignInData] = useState({ email: "", password: "" });
 
+  // Handle Sign Up
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
       const data = await registerUser(signUpData);
       localStorage.setItem("token", data.token);
+      
+      // EMAIL SET KARNA (SIGN UP PE)
+      localStorage.setItem("userEmail", signUpData.email);
+      
       alert("Registered successfully!");
       window.location.href = "/dashboard";
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
+    }
+  };
+
+  // Handle Sign In
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await loginUser(signInData);
+      localStorage.setItem("token", data.token);
+
+      // EMAIL SET KARNA (SIGN IN PE)
+      // Note: Agar backend user object bhej raha hai toh data.user.email bhi use kar sakte hain
+      localStorage.setItem("userEmail", signInData.email);
+
+      alert("Logged in successfully!");
+      window.location.href = "/dashboard";
+    } catch (error) {
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -33,27 +56,13 @@ const AuthForm = () => {
     }
   };
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await loginUser(signInData);
-      localStorage.setItem("token", data.token);
-      alert("Logged in successfully!");
-      window.location.href = "/dashboard";
-    } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
-    }
-  };
-
   return (
-    /* Apply the maanga hua gradient here */
     <div className="auth-page-wrapper bg-[#0F172A]">
       <h1 className="text-white text-4xl md:text-6xl text-center mb-8 main-title font-bold">
         Finance Splitter
       </h1>
       
       <div className={`container ${rightPanelActive ? "right-panel-active" : ""}`} id="container">
-        
         {/* Sign Up Form */}
         <div className="form-container sign-up-container">
           <form onSubmit={handleSignUp}>
@@ -62,7 +71,6 @@ const AuthForm = () => {
             <input type="email" placeholder="Email" value={signUpData.email} onChange={e => setSignUpData({...signUpData, email: e.target.value})} />
             <input type="password" placeholder="Password" value={signUpData.password} onChange={e => setSignUpData({...signUpData, password: e.target.value})} />
             <button type="submit">Sign Up</button>
-            
             <button type="button" className="mobile-toggle-btn" onClick={() => setRightPanelActive(false)}>
               Already have an account? Sign In
             </button>
@@ -77,14 +85,12 @@ const AuthForm = () => {
             <input type="password" placeholder="Password" value={signInData.password} onChange={e => setSignInData({...signInData, password: e.target.value})} />
             <a href="#" onClick={handleForgotPassword} className="forgot-link">Forgot your password?</a>
             <button type="submit">Sign In</button>
-
             <button type="button" className="mobile-toggle-btn" onClick={() => setRightPanelActive(true)}>
               New here? Create Account
             </button>
           </form>
         </div>
 
-        {/* Overlay Panel */}
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">

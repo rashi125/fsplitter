@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [groups, setGroups] = useState([]);
   const [groupName, setGroupName] = useState("");
+  
+  // States for Navbar functionality
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
   const fetchGroups = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/groups", {
@@ -22,6 +27,12 @@ const Dashboard = () => {
   useEffect(() => {
     fetchGroups();
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    navigate("/");
+  };
 
   const createGroup = async () => {
     if (!groupName.trim()) return;
@@ -39,55 +50,101 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={styles.container} className="
-bg-[#0F172A]">
-      <div style={styles.contentWrapper}>
-        <header style={styles.headerSection}>
-          <h1 style={styles.headerTitle}>Finance Dashboard</h1>
-          <p style={styles.headerSubtitle}>Manage your shared expenses and groups</p>
+    <div className="min-h-screen w-full bg-[#0F172A] text-white font-sans selection:bg-[#3cb387]">
+      
+      {/* --- STICKY TOP NAVIGATION --- */}
+      <nav className="sticky top-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-[#1A2E2E] px-6 py-4">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center">
+          <h2 className="text-[#24db92] font-black text-xl tracking-tighter italic">FINANCE SPLITTER</h2>
+          
+          <div className="relative">
+            {/* User Avatar Dropdown Toggle */}
+            <div 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)} 
+              className="bg-[#24db92] text-black w-10 h-10 rounded-full flex items-center justify-center font-black text-sm cursor-pointer shadow-lg hover:scale-105 transition-all"
+            >
+              JD
+            </div>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-3 w-64 bg-[#101D1D] border border-[#1A2E2E] rounded-2xl shadow-2xl py-2 overflow-hidden z-[60]">
+                <div className="px-4 py-3 border-b border-white/5 mb-2">
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Signed in as</p>
+                  <p className="text-sm font-bold text-[#3cb387] truncate">{userEmail}</p>
+                </div>
+                
+                <button 
+                  onClick={handleLogout} 
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-red-500 hover:text-white font-bold transition-all flex items-center gap-2"
+                >
+                  🚪 Log Out
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* --- MAIN CONTENT --- */}
+      <main className="max-w-[1200px] mx-auto px-6 py-12">
+        
+        <header className="mb-12">
+          <h1 className="text-5xl font-black mb-2 tracking-tighter uppercase italic">
+            Finance <span className="text-[#3cb387]">Dashboard</span>
+          </h1>
+          <p className="text-gray-500 font-medium tracking-wide">Manage your shared expenses and groups efficiently.</p>
         </header>
 
-        {/* Create Group Section */}
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle} className="text-black">
-            Create New Group
-          </h2>
-          <div style={styles.inputGroup}>
+        {/* Create Group Card */}
+        <section className="bg-[#101D1D] p-8 rounded-[2.5rem] border border-[#1A2E2E] mb-12 shadow-2xl">
+          <h2 className="text-xl font-bold mb-6 uppercase tracking-tighter text-white">Create New Group</h2>
+          <div className="flex flex-col md:flex-row gap-4">
             <input
               type="text"
               placeholder="e.g. Trip to Japan, Housemates"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
-              style={styles.input}
+              className="flex-1 bg-[#081212] border border-[#1A2E2E] py-4 px-6 rounded-2xl text-sm outline-none focus:border-[#3cb387] transition-all"
             />
-            <button onClick={createGroup} style={styles.primaryButton}>
+            <button 
+              onClick={createGroup} 
+              className="bg-[#10B981] text-black font-black px-10 py-4 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#10B981]/20 uppercase text-xs tracking-widest"
+            >
               + Create Group
             </button>
           </div>
-        </div>
+        </section>
 
-        {/* Existing Groups */}
-        <div style={styles.listSection}>
-          <h2 style={styles.cardTitle} className="text-white">
+        {/* Existing Groups Grid */}
+        <section>
+          <h2 className="text-xl font-bold mb-8 uppercase tracking-tighter italic border-l-4 border-[#3cb387] pl-4">
             Your Active Groups
           </h2>
-          <div style={styles.grid}>
-            {Array.isArray(groups) && groups.length === 0 ? (
-              <div style={styles.emptyState}>
-                <p>No active groups. Start by creating one above.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {groups.length === 0 ? (
+              <div className="col-span-full py-20 text-center bg-white/5 rounded-[2.5rem] border border-dashed border-[#1A2E2E]">
+                <p className="text-gray-600 font-bold uppercase tracking-widest italic">No active groups. Start by creating one above.</p>
               </div>
             ) : (
-              groups?.map((group) => (
-                <div key={group._id} style={styles.groupCard}>
-                  <div style={styles.groupInfo}>
-                    <h3 style={styles.groupName}>{group.name}</h3>
-                    <span style={styles.memberBadge}>
+              groups.map((group) => (
+                <div 
+                  key={group._id} 
+                  className="bg-[#101D1D] border border-[#1A2E2E] p-8 rounded-[2.5rem] hover:border-[#3cb387]/50 transition-all group flex flex-col justify-between"
+                >
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-black text-white group-hover:text-[#3cb387] transition-colors uppercase tracking-tight leading-none mb-4">
+                      {group.name}
+                    </h3>
+                    <span className="text-[10px] font-black text-[#24db92] bg-[#24db92]/10 px-4 py-2 rounded-full uppercase tracking-widest border border-[#24db92]/20">
                       {group.members.length} {group.members.length === 1 ? 'Member' : 'Members'}
                     </span>
                   </div>
+                  
                   <button
-                    style={styles.secondaryButton}
-                   onClick={() => navigate(`/group/${group._id}`)}
+                    onClick={() => navigate(`/group/${group._id}`)}
+                    className="w-full py-4 bg-white/5 hover:bg-white text-white hover:text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border border-white/10"
                   >
                     View Details
                   </button>
@@ -95,132 +152,10 @@ bg-[#0F172A]">
               ))
             )}
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    width: "100vw",
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    padding: "60px 20px",
-    boxSizing: "border-box",
-  },
-  contentWrapper: {
-    maxWidth: "900px",
-    margin: "0 auto",
-  },
-  headerSection: {
-    textAlign: "left",
-    marginBottom: "40px",
-  },
-  headerTitle: {
-    fontSize: "32px",
-    fontWeight: "800",
-    color: "White",
-    margin: "0 0 8px 0",
-    letterSpacing: "-0.025em",
-  },
-  headerSubtitle: {
-    color: "Gray",
-    fontSize: "16px",
-    margin: 0,
-    fontWeight: "500",
-  },
-  card: {
-    backgroundColor: "#FFFFFF",
-    padding: "24px",
-    borderRadius: "16px",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)",
-    marginBottom: "32px",
-    border: "1px solid #E2E8F0",
-  },
-  cardTitle: {
-    fontSize: "18px",
-    fontWeight: "600",
-   
-    marginBottom: "20px",
-    marginTop: 0,
-  },
-  inputGroup: {
-    display: "flex",
-    gap: "12px",
-  },
-  input: {
-    flex: 1,
-    padding: "12px 16px",
-    borderRadius: "10px",
-    border: "1px solid #1E293B",
-    fontSize: "15px",
-    outline: "none",
-    transition: "border-color 0.2s",
-    backgroundColor: "#F1F5F9",
-  },
-  primaryButton: {
-    padding: "12px 24px",
-    backgroundColor: "#10B981 ", 
-    border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "15px",
-    transition: "background-color 0.2s",
-  },
-  listSection: {
-    marginTop: "20px",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-    gap: "20px",
-  },
-  groupCard: {
-    backgroundColor: "#FFFFFF",
-    border: "1px solid #E2E8F0",
-    padding: "20px",
-    borderRadius: "16px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    transition: "transform 0.2s, box-shadow 0.2s",
-    cursor: "default",
-  },
-  groupName: {
-    fontSize: "19px",
-    fontWeight: "700",
-    color: "#1E293B",
-    margin: "0 0 8px 0",
-  },
-  memberBadge: {
-    fontSize: "13px",
-    fontWeight: "500",
-    color: "#6366F1",
-    backgroundColor: "#EEF2FF",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    display: "inline-block",
-    marginBottom: "20px",
-  },
-  secondaryButton: {
-    padding: "10px",
-    backgroundColor: "#FFFFFF",
-    color: "#475569",
-    border: "1px solid #E2E8F0",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "14px",
-    transition: "all 0.2s",
-  },
-  emptyState: {
-    textAlign: "center",
-    padding: "40px",
-    color: "#94A3B8",
-    gridColumn: "1 / -1",
-  }
 };
 
 export default Dashboard;
