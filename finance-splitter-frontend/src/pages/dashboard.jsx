@@ -55,15 +55,15 @@ const Dashboard = () => {
       {/* --- STICKY TOP NAVIGATION --- */}
       <nav className="sticky top-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-[#1A2E2E] px-6 py-4">
         <div className="max-w-[1200px] mx-auto flex justify-between items-center">
-          <h2 className="text-[#24db92] font-black text-xl tracking-tighter italic">FINANCE SPLITTER</h2>
+          <h2 className="text-[#24db92] font-black text-xl  italic">FINANCE SPLITTER</h2>
           
           <div className="relative">
             {/* User Avatar Dropdown Toggle */}
             <div 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)} 
               className="bg-[#24db92] text-black w-10 h-10 rounded-full flex items-center justify-center font-black text-sm cursor-pointer shadow-lg hover:scale-105 transition-all"
-            >
-              JD
+            >👩
+              
             </div>
 
             {/* Dropdown Menu */}
@@ -91,7 +91,7 @@ const Dashboard = () => {
         
         <header className="mb-12">
           <h1 className="text-5xl font-black mb-2 tracking-tighter uppercase italic">
-            Finance <span className="text-[#3cb387]">Dashboard</span>
+            Finance <span className="text-[#3cb387] tracking-wide">Dashboard</span>
           </h1>
           <p className="text-gray-500 font-medium tracking-wide">Manage your shared expenses and groups efficiently.</p>
         </header>

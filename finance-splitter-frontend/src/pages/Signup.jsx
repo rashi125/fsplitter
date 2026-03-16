@@ -58,6 +58,8 @@ const AuthForm = () => {
 
   return (
     <div className="auth-page-wrapper bg-[#0F172A]">
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#3cb387]/20 blur-[120px] rounded-full animate-pulse"></div>
+    <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-[#00E5FF]/25 blur-[100px] rounded-full"></div>
       <h1 className="text-white text-4xl md:text-6xl text-center mb-8 main-title font-bold">
         Finance Splitter
       </h1>

@@ -88,3 +88,26 @@ exports.getSplitDetails = async (req, res) => {
     res.status(500).json({ message: "Split calculation failed" });
   }
 };
+// UPDATE SUBSCRIPTION
+exports.updateSubscription = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedSub = await Subscription.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedSub) return res.status(404).json({ message: "Subscription not found" });
+    res.status(200).json(updatedSub);
+  } catch (error) {
+    res.status(500).json({ message: "Update failed", error: error.message });
+  }
+};
+
+// DELETE SUBSCRIPTION
+exports.deleteSubscription = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedSub = await Subscription.findByIdAndDelete(id);
+    if (!deletedSub) return res.status(404).json({ message: "Subscription not found" });
+    res.status(200).json({ message: "Deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Delete failed", error: error.message });
+  }
+};

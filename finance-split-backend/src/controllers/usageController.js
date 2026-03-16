@@ -93,3 +93,25 @@ console.log("full body:", req.body);
         });
     }
 };
+// controllers/usageController.js
+
+exports.settleUpUser = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const userId = req.user.userId;
+
+    // Is group se judi saari subscriptions dhundo
+    const subscriptions = await Subscription.find({ group: groupId });
+    const subIds = subscriptions.map(s => s._id);
+
+    // Un subscriptions par is user ki jitni bhi usage hai, delete kar do
+    await Usage.deleteMany({
+      user: userId,
+      subscription: { $in: subIds }
+    });
+
+    res.status(200).json({ success: true, message: "Settle up successful. Usage reset." });
+  } catch (error) {
+    res.status(500).json({ message: "Settle up failed", error: error.message });
+  }
+};

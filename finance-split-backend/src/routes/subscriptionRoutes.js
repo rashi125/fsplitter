@@ -4,11 +4,16 @@ const auth = require("../middleware/authMiddleware");
 const {
   createSubscription,
   getGroupSubscriptions,
-  getSplitDetails
+  getSplitDetails,
+  updateSubscription, // Import karein
+  deleteSubscription,
+
 } = require("../controllers/subscriptionController");
 
 // Specific FIRST
 router.get("/split/:subscriptionId", auth, getSplitDetails);
+router.put("/:id", auth, updateSubscription);    
+router.delete("/:id", auth, deleteSubscription);
 
 // Then generic
 router.post("/", auth, createSubscription);
