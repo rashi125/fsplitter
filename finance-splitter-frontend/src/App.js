@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Signup";
 // import Login from "./pages/Login";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/Dashboard";
 import GroupDetails from "./pages/GroupDetail";
 import ResetPassword from "./pages/ResetPassword";
 function App() {
