@@ -5,12 +5,15 @@ const {
   createGroup,
   getMyGroups,
   addMemberToGroup,
-  getGroupById
+  getGroupById,
+  leaveGroup,
+  // deleteGroup
 } = require("../controllers/groupController");
 
 router.post("/", auth, createGroup);
 router.get("/", auth, getMyGroups);
 router.post("/add-member", auth, addMemberToGroup);
 router.get("/:groupId", auth, getGroupById);
-router.delete("/leave/:groupId", auth, groupController.leaveGroup);
+router.delete("/leave/:groupId", auth, leaveGroup);
+// router.delete("/:groupId", auth, deleteGroup);
 module.exports = router;

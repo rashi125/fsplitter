@@ -23,9 +23,12 @@ const subscriptionSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
-    }
-  },
-  { timestamps: true }
+    },
+    // timestamps: {true},
+   maxHours: { type: Number, default: 100 }, 
+  startDate: { type: Date, default: Date.now }
+  }
+ 
 );
 
 module.exports = mongoose.model("Subscription", subscriptionSchema);

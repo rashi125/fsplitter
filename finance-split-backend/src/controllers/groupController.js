@@ -95,20 +95,23 @@ exports.leaveGroup = async (req, res) => {
     const group = await Group.findById(groupId);
     if (!group) return res.status(404).json({ message: "Group not found" });
 
-    // Agar Admin leave karna chahta hai, toh use pehle kisi aur ko admin banana hoga 
-    // ya group delete karna hoga (standard protocol)
-    if (group.admin.toString() === userId) {
+  
+    const adminId = group.owner ;
+
+    if (adminId && adminId.toString() === userId) {
       return res.status(400).json({ 
         message: "Admin cannot leave. Please delete the group or transfer admin rights." 
       });
     }
 
     // Member ko list se bahar nikaalo
+    // Check karein ki members array mein IDs hain ya objects
     group.members = group.members.filter(memberId => memberId.toString() !== userId);
     await group.save();
 
     res.json({ success: true, message: "You left the group." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("LEAVE GROUP ERROR:", err); // Isse terminal mein asli error dikhega
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
   }
 };
