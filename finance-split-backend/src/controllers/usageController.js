@@ -1,4 +1,4 @@
-const Usage = require("../models/usage");
+const Usage = require("../models/Usage");
 const Subscription = require("../models/Subscription");
 
 // ADD OR UPDATE USAGE (UPSERT)
