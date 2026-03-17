@@ -55,7 +55,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Use RAW token in the URL
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `https://fsplitter-frontned.onrender.com//reset-password/${resetToken}`;
     console.log("--- NEW RESET LINK GENERATED ---");
     console.log(resetUrl);
 
