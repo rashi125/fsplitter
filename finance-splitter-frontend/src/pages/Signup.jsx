@@ -49,7 +49,7 @@ const AuthForm = () => {
     const email = prompt("Please enter your email address:");
     if (!email) return;
     try {
-      await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+      await axios.post("${process.env.REACT_APP_API_URL}/api/auth/forgot-password", { email });
       alert("If that email exists, a reset link has been sent!");
     } catch (error) {
       alert("Error sending reset link.");

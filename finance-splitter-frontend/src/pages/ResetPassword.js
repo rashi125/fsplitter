@@ -12,7 +12,7 @@ const ResetPassword = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.put(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
+            await axios.put(`"${process.env.REACT_APP_API_URL}/api/auth/reset-password/${token}`, { password });
             alert("Password updated! Redirecting to login...");
             navigate("/auth"); // Adjust this path to your login page
         } catch (err) {

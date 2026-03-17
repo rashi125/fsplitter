@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   const fetchGroups = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/groups", {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/groups`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setGroups(res.data);
@@ -40,7 +40,7 @@ const Dashboard = () => {
     if (!groupName.trim()) return;
     try {
       await axios.post(
-        "http://localhost:5000/api/groups",
+        `${process.env.REACT_APP_API_URL}/api/groups`,
         { name: groupName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -55,7 +55,7 @@ const Dashboard = () => {
   const deleteGroup = async (groupId, name) => {
     if (!window.confirm(`Are you sure you want to delete "${name}"? All data will be lost.`)) return;
     try {
-      await axios.delete(`http://localhost:5000/api/groups/${groupId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/groups/${groupId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchGroups();
@@ -68,7 +68,7 @@ const Dashboard = () => {
   const handleLeaveGroup = async (groupId, name) => {
     if (!window.confirm(`Are you sure you want to leave "${name}"?`)) return;
     try {
-      await axios.delete(`http://localhost:5000/api/groups/leave/${groupId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/groups/leave/${groupId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("You have left the group.");

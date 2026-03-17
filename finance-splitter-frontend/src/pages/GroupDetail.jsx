@@ -77,14 +77,14 @@ const GroupDetails = () => {
     try {
       const headers = { headers: { Authorization: `Bearer ${token}` } };
       const groupRes = await axios.get(
-        `http://localhost:5000/api/groups/${cleanGroupId}`,
+        `${process.env.REACT_APP_API_URL}/api/groups/${cleanGroupId}`,
         headers,
       );
       setGroup(groupRes.data);
       setGroupMembers(groupRes.data.members || []);
 
       const subRes = await axios.get(
-        `http://localhost:5000/api/subscriptions/${cleanGroupId}`,
+        `${process.env.REACT_APP_API_URL}/api/subscriptions/${cleanGroupId}`,
         headers,
       );
       const subs = Array.isArray(subRes.data) ? subRes.data : [];
@@ -93,7 +93,7 @@ const GroupDetails = () => {
       subs.forEach(async (sub) => {
         try {
           const splitRes = await axios.get(
-            `http://localhost:5000/api/split/${sub._id}`,
+            `${process.env.REACT_APP_API_URL}/api/split/${sub._id}`,
             headers,
           );
           if (splitRes.data.success) {
@@ -119,8 +119,8 @@ const GroupDetails = () => {
     e.preventDefault();
     try {
       const url = isEditMode
-        ? `http://localhost:5000/api/subscriptions/${editingSubId}`
-        : "http://localhost:5000/api/subscriptions";
+        ? `${process.env.REACT_APP_API_URL}/api/subscriptions/${editingSubId}`
+        : `${process.env.REACT_APP_API_URL}/api/subscriptions`;
       const method = isEditMode ? "put" : "post";
 
       await axios[method](
@@ -147,7 +147,7 @@ const GroupDetails = () => {
     )
       return;
     try {
-      await axios.delete(`http://localhost:5000/api/subscriptions/${subId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/subscriptions/${subId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchData();
@@ -172,7 +172,7 @@ const GroupDetails = () => {
     if (!newMemberEmail.trim()) return;
     try {
       await axios.post(
-        `http://localhost:5000/api/groups/add-member`,
+        `${process.env.REACT_APP_API_URL}/api/groups/add-member`,
         { groupId: cleanGroupId, email: newMemberEmail.trim().toLowerCase() },
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -188,7 +188,7 @@ const GroupDetails = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:5000/api/usage",
+        `${process.env.REACT_APP_API_URL}/api/usage`,
         {
           subscriptionId: usageForm.subscriptionId,
           usageHours: Number(usageForm.hours),
@@ -228,7 +228,7 @@ const GroupDetails = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/usage/settle-up/${cleanGroupId}`,
+        `${process.env.REACT_APP_API_URL}/api/usage/settle-up/${cleanGroupId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
