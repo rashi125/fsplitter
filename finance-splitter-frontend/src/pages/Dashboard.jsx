@@ -8,54 +8,53 @@ const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   const userEmail = localStorage.getItem("userEmail") || "user@email.com";
-  // const token = localStorage.getItem("token");
-  
   const currentUserId = localStorage.getItem("userId"); 
-
   const navigate = useNavigate();
 
+  // Function to fetch groups
   const fetchGroups = async () => {
     const currentToken = localStorage.getItem("token"); 
-  
-  if (!currentToken) {
-    console.error("No token found, redirecting...");
-    return navigate("/"); 
-  }
+    
+    if (!currentToken) {
+      console.error("No token found, redirecting...");
+      return navigate("/"); 
+    }
+
     try {
-      
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/groups`, {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       setGroups(res.data);
     } catch (err) {
       console.error("Error fetching groups", err);
+      if (err.response?.status === 401) navigate("/");
     }
   };
 
   useEffect(() => {
-    fetchGroups();
+    const currentToken = localStorage.getItem("token");
+    if (!currentToken) {
+      navigate("/");
+    } else {
+      fetchGroups();
+    }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userId");
+    localStorage.clear(); // Saara data ek saath clear karne ke liye
     navigate("/");
   };
 
   const createGroup = async () => {
     const currentToken = localStorage.getItem("token"); 
-  
-  if (!currentToken) {
-    console.error("No token found, redirecting...");
-    return navigate("/"); 
-  }
+    if (!currentToken) return navigate("/");
     if (!groupName.trim()) return;
+
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/groups`,
         { name: groupName },
-        { headers: { Authorization: `Bearer ${currentTokens}` } }
+        { headers: { Authorization: `Bearer ${currentToken}` } } // 'currentTokens' fixed to 'currentToken'
       );
       setGroupName("");
       fetchGroups();
@@ -66,10 +65,12 @@ const Dashboard = () => {
 
   // --- DELETE GROUP (ONLY ADMIN) ---
   const deleteGroup = async (groupId, name) => {
-    if (!window.confirm(`Are you sure you want to delete "${name}"? All data will be lost.`)) return;
+    const currentToken = localStorage.getItem("token");
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
+
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/groups/${groupId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${currentToken}` }, // 'token' fixed to 'currentToken'
       });
       fetchGroups();
     } catch (err) {
@@ -79,10 +80,12 @@ const Dashboard = () => {
 
   // --- LEAVE GROUP (FOR MEMBERS) ---
   const handleLeaveGroup = async (groupId, name) => {
+    const currentToken = localStorage.getItem("token");
     if (!window.confirm(`Are you sure you want to leave "${name}"?`)) return;
+
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/groups/leave/${groupId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${currentToken}` }, // 'token' fixed to 'currentToken'
       });
       alert("You have left the group.");
       fetchGroups();
@@ -93,20 +96,17 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0F172A] text-white font-sans selection:bg-[#3cb387] relative overflow-hidden">
-      {/* Background Blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#3cb387]/20 blur-[120px] rounded-full animate-pulse pointer-events-none"></div>
       <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-[#00E5FF]/15 blur-[100px] rounded-full pointer-events-none"></div>
 
       <nav className="sticky top-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-[#1A2E2E] px-6 py-4">
         <div className="max-w-[1200px] mx-auto flex justify-between items-center">
           <h2 className="text-[#24db92] font-black text-xl italic tracking-tighter">FINANCE SPLITTER</h2>
-          
           <div className="relative">
             <div 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)} 
               className="bg-[#24db92] text-black w-10 h-10 rounded-full flex items-center justify-center font-black text-sm cursor-pointer shadow-lg hover:scale-105 transition-all"
             >👩</div>
-
             {isDropdownOpen && (
               <div className="absolute right-0 mt-3 w-64 bg-[#101D1D] border border-[#1A2E2E] rounded-2xl shadow-2xl py-2 overflow-hidden z-[60]">
                 <div className="px-4 py-3 border-b border-white/5 mb-2">
@@ -152,7 +152,6 @@ const Dashboard = () => {
 
         <section>
           <h2 className="text-xl font-bold mb-8 uppercase tracking-tighter italic border-l-4 border-[#3cb387] pl-4">Your Active Groups</h2>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {groups.length === 0 ? (
               <div className="col-span-full py-20 text-center bg-white/5 rounded-[2.5rem] border border-dashed border-[#1A2E2E]">
@@ -160,33 +159,21 @@ const Dashboard = () => {
               </div>
             ) : (
               groups.map((group) => {
-                // Check if current user is the owner/admin
-                // Backend me Group model me 'owner' field hai, to wahi use karenge
                 const isAdmin = group.owner === currentUserId;
-
                 return (
                   <div 
                     key={group._id} 
                     className="bg-[#101D1D] border border-[#1A2E2E] p-8 rounded-[2.5rem] hover:border-[#3cb387]/40 transition-all group flex flex-col justify-between relative overflow-hidden"
                   >
-                    {/* --- DYNAMIC ACTION ICON (DELETE OR LEAVE) --- */}
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (isAdmin) {
-                          deleteGroup(group._id, group.name);
-                        } else {
-                          handleLeaveGroup(group._id, group.name);
-                        }
+                        if (isAdmin) deleteGroup(group._id, group.name);
+                        else handleLeaveGroup(group._id, group.name);
                       }}
                       className="absolute top-6 right-6 text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-125 font-bold text-xs"
-                      title={isAdmin ? "Delete Group" : "Leave Group"}
                     >
-                      {isAdmin ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                      ) : (
-                        <span className="bg-red-500/10 px-2 py-1 rounded text-red-500">LEAVE 🚪</span>
-                      )}
+                      {isAdmin ? "🗑️" : "🚪"}
                     </button>
 
                     <div className="mb-8">
@@ -196,10 +183,6 @@ const Dashboard = () => {
                       <div className="flex flex-col gap-2">
                         <span className="text-[10px] font-black text-[#24db92] bg-[#24db92]/10 px-4 py-2 rounded-full uppercase tracking-widest border border-[#24db92]/20 w-fit">
                           {group.members.length} {group.members.length === 1 ? 'Member' : 'Members'}
-                        </span>
-                        {/* Visual Badge for Role */}
-                        <span className="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] ml-2">
-                           {isAdmin ? "Admin / Owner" : "Member"}
                         </span>
                       </div>
                     </div>

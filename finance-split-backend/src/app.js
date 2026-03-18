@@ -7,8 +7,6 @@ const subscriptionRoutes = require("./routes/subscriptionRoutes");
 const app = express();
 const usageRoutes = require("./routes/usageRoutes");
 const splitRoutes = require("./routes/splitRoutes");
-
-
 app.use(cors());
 app.use(express.json());
 app.use("/api/split", splitRoutes);
