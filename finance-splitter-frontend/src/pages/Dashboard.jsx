@@ -9,15 +9,22 @@ const Dashboard = () => {
   
   const userEmail = localStorage.getItem("userEmail") || "user@email.com";
   const token = localStorage.getItem("token");
-  // Maan lijiye aapne login ke waqt userId bhi save ki hai, agar nahi ki to hum token se nikaal sakte hain
+  
   const currentUserId = localStorage.getItem("userId"); 
 
   const navigate = useNavigate();
 
   const fetchGroups = async () => {
+    const currentToken = localStorage.getItem("token"); 
+  
+  if (!currentToken) {
+    console.error("No token found, redirecting...");
+    return navigate("/"); 
+  }
     try {
+      
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/groups`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${currentToken}` },
       });
       setGroups(res.data);
     } catch (err) {
@@ -37,6 +44,12 @@ const Dashboard = () => {
   };
 
   const createGroup = async () => {
+    const currentToken = localStorage.getItem("token"); 
+  
+  if (!currentToken) {
+    console.error("No token found, redirecting...");
+    return navigate("/"); 
+  }
     if (!groupName.trim()) return;
     try {
       await axios.post(
