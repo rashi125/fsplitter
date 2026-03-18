@@ -27,15 +27,18 @@ const AuthForm = () => {
   };
 
   // Handle Sign In
-  const handleSignIn = async (e) => {
+const handleSignIn = async (e) => {
     e.preventDefault();
     try {
       const data = await loginUser(signInData);
       localStorage.setItem("token", data.token);
-
-      // EMAIL SET KARNA (SIGN IN PE)
-      // Note: Agar backend user object bhej raha hai toh data.user.email bhi use kar sakte hain
       localStorage.setItem("userEmail", signInData.email);
+     
+      if (data.user && data.user.id) {
+        localStorage.setItem("userId", data.user.id);
+      } else if (data.userId) {
+        localStorage.setItem("userId", data.userId);
+      }
 
       alert("Logged in successfully!");
       window.location.href = "/dashboard";
@@ -49,7 +52,7 @@ const AuthForm = () => {
     const email = prompt("Please enter your email address:");
     if (!email) return;
     try {
-      await axios.post("${process.env.REACT_APP_API_URL}/api/auth/forgot-password", { email });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/forgot-password`, { email });
       alert("If that email exists, a reset link has been sent!");
     } catch (error) {
       alert("Error sending reset link.");
