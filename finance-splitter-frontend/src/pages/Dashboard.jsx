@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   const userEmail = localStorage.getItem("userEmail") || "user@email.com";
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   
   const currentUserId = localStorage.getItem("userId"); 
 
@@ -55,7 +55,7 @@ const Dashboard = () => {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/groups`,
         { name: groupName },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${currentTokens}` } }
       );
       setGroupName("");
       fetchGroups();
