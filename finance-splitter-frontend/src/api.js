@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "${process.env.REACT_APP_API_URL}/api"; // your backend URL
+const API_BASE = `${process.env.REACT_APP_API_URL}/api`; // your backend URL
 
 export const registerUser = async (userData) => {
   const res = await axios.post(`${API_BASE}/auth/register`, userData);
