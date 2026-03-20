@@ -1,5 +1,7 @@
 💸 FinanceSplit: Usage-Based Expense Management
+
 Live: https://fsplitter-frontned.onrender.com/register
+
 A professional MERN Stack application designed to simplify shared expenses, group finances, and usage-based cost tracking. Built with a focus on secure authentication and seamless production deployment.
 🚀 Key Features
 Secure Authentication: JWT-based login/signup with persistent sessions using LocalStorage.
