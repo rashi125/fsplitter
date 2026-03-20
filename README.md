@@ -30,8 +30,10 @@ Deployment: Render (Frontend & Backend).
 Clone the repository:
 
 Bash
-git clone https://github.com/your-username/finance-splitter.git
+git clone https://github.com/rashi125/finance-splitter.git
+
 cd finance-splitter
+
 Backend Setup:
 
 Create a .env file in the backend folder:
